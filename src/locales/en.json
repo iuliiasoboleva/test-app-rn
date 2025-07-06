@@ -1,8 +1,17 @@
 {
+    "chooseItem": "Choose an item from the list",
+    "search": "Search",
+    "list": "List",
+    "detail": "Detail",
+    "setting": "Settings",
+    "enter": "Sign In",
+    "access": "Get Started",
     "login": "Login",
     "password": "Password",
     "settings": {
         "title": "Settings",
+        "theme": "Choose theme",
+        "language": "Choose language",
         "darkTheme": "Dark Theme",
         "ru": "Russian",
         "en": "English",

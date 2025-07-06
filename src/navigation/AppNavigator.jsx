@@ -9,6 +9,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Ionicons';
+import { useTranslation } from 'react-i18next';
+
 import { ThemeContext } from '../ThemeContext';
 import { setAuth } from '../store/authSlice';
 
@@ -20,26 +22,51 @@ import LoginScreen from '../screens/LoginScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const Tabs = () => (
-    <Tab.Navigator>
-        <Tab.Screen name="List" component={ListScreen} options={{
-            tabBarIcon: ({ color, size }) => (
-                <Icon name="list-outline" color={color} size={size} />
-            ),
-        }} />
-        <Tab.Screen name="Detail" component={DetailScreen} options={{
-            tabBarIcon: ({ color, size }) => (
-                <Icon name="document-text-outline" color={color} size={size} />
-            ),
-        }} />
+const Tabs = () => {
+    const { t } = useTranslation();
 
-        <Tab.Screen name="Settings" component={SettingsScreen} options={{
-            tabBarIcon: ({ color, size }) => (
-                <Icon name="settings-outline" color={color} size={size} />
-            ),
-        }} />
-    </Tab.Navigator>
-);
+    return (
+        <Tab.Navigator
+            screenOptions={{
+                tabBarLabelStyle: {
+                    fontFamily: 'Montserrat-Bold',
+                    fontSize: 10,
+                },
+            }}
+        >
+            <Tab.Screen
+                name="List"
+                component={ListScreen}
+                options={{
+                    title: t('list'),
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="list-outline" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Detail"
+                component={DetailScreen}
+                options={{
+                    title: t('detail'),
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="document-text-outline" color={color} size={size} />
+                    ),
+                }}
+            />
+            <Tab.Screen
+                name="Settings"
+                component={SettingsScreen}
+                options={{
+                    title: t('setting'),
+                    tabBarIcon: ({ color, size }) => (
+                        <Icon name="settings-outline" color={color} size={size} />
+                    ),
+                }}
+            />
+        </Tab.Navigator>
+    );
+};
 
 const AppNavigator = () => {
     const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);

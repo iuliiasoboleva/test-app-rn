@@ -47,11 +47,20 @@ npx react-native run-android
 
 ## Скриншоты
 
-### 📱 Главный экран
-![Главный экран](./assets/images/screenshots/screen1.jpg)
+### Авторизация
+<img src="./assets/images/screenshots/screen1.jpg" alt="Авторизация" width="300" />
 
-### ⚙️ Экран настроек
-![Настройки](./assets/images/screenshots/screen2.jpg)
+### Список элементов
+<img src="./assets/images/screenshots/screen2.jpg" alt="Список элементов" width="300" />
+
+### Элемент
+<img src="./assets/images/screenshots/screen3.jpg" alt="Элемент" width="300" />
+
+### Настройки
+<img src="./assets/images/screenshots/screen4.jpg" alt="Настройки" width="300" />
+
+### Темная тема и поиск
+<img src="./assets/images/screenshots/screen5.jpg" alt="Темная тема и поиск" width="300" />
 
 ---
 

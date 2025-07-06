@@ -33,7 +33,7 @@ const LoginScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>Вход</Text>
+      <Text style={[styles.title, { color: colors.text }]}>{t('enter')}</Text>
 
       <TextInput
         style={[styles.input, { color: colors.text, borderColor: colors.border }]}
@@ -53,7 +53,7 @@ const LoginScreen = () => {
         secureTextEntry
       />
 
-      <Button title="Войти" onPress={handleLogin} />
+      <Button title={t('access')} onPress={handleLogin} />
     </View>
   );
 };

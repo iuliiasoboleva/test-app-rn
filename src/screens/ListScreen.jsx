@@ -13,14 +13,17 @@ import {
   useColorScheme,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { setItems, setCurrentItem, setLoading } from '../store/itemsSlice';
 import notifee, { AndroidImportance } from '@notifee/react-native';
+import { useTranslation } from 'react-i18next';
+import { setItems, setCurrentItem, setLoading } from '../store/itemsSlice';
 
 const GITHUB_USER = 'iuliiasoboleva';
 const PER_PAGE = 5;
 
 const ListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
+
   const items = useSelector((state) => state.items.items || []);
   const loading = useSelector((state) => state.items.loading);
 
@@ -95,7 +98,7 @@ const ListScreen = ({ navigation }) => {
     navigation.navigate('Detail');
 
     await notifee.displayNotification({
-      title: 'Вы выбрали элемент',
+      title: t('chooseItem'),
       body: `ID: ${item.id}, Name: ${item.name}`,
       android: {
         channelId: 'default',
@@ -120,8 +123,15 @@ const ListScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <TextInput
-        style={styles.searchInput}
-        placeholder="Поиск..."
+        style={[
+          styles.searchInput,
+          {
+            color: colorScheme === 'dark' ? '#fff' : '#000',
+            backgroundColor: colorScheme === 'dark' ? '#333' : '#fff',
+            borderColor: colorScheme === 'dark' ? '#666' : '#ccc',
+          },
+        ]}
+        placeholder={t('search')}
         placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'}
         value={query}
         onChangeText={setQuery}
@@ -161,7 +171,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontFamily: 'Roboto-Regular',
-    fontSize: 16
+    fontSize: 16,
   },
   loaderContainer: {
     flex: 1,
@@ -170,12 +180,10 @@ const styles = StyleSheet.create({
   },
   searchInput: {
     height: 40,
-    borderColor: '#ccc',
     borderWidth: 1,
     borderRadius: 8,
     paddingHorizontal: 12,
     marginBottom: 12,
-    color: '#000',
   },
 });
 

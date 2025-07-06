@@ -1,11 +1,18 @@
 import React, { useContext } from 'react';
-import { View, Text, Switch, StyleSheet, TouchableOpacity, Button } from 'react-native';
+import {
+  View,
+  Text,
+  Switch,
+  StyleSheet,
+  TouchableOpacity,
+  Button,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch } from 'react-redux';
 import { logout } from '../store/authSlice';
 import { useTheme } from '@react-navigation/native';
 import { ThemeContext } from '../ThemeContext';
-import { useTranslation } from 'react-i18next'; // ✅ подключаем хук
+import { useTranslation } from 'react-i18next';
 
 const SettingsScreen = () => {
   const dispatch = useDispatch();
@@ -25,46 +32,60 @@ const SettingsScreen = () => {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <Text style={[styles.title, { color: colors.text }]}>{t('settings.title')}</Text>
-
+      <Text style={[styles.labelName, { color: colors.text }]}>
+        {t('settings.theme')}
+      </Text>
       <View style={styles.row}>
-        <Text style={[styles.label, { color: colors.text }]}>{t('settings.darkTheme')}</Text>
+        <Text style={[styles.label, { color: colors.text }]}>
+          {t('settings.darkTheme')}
+        </Text>
         <Switch value={darkMode} onValueChange={toggleTheme} />
       </View>
 
-      <View style={styles.row}>
+      <Text style={[styles.labelName, { color: colors.text }]}>
+        {t('settings.language')}
+      </Text>
+
+      <View style={styles.langSwitcher}>
         <TouchableOpacity
           style={[
-            styles.langButton,
-            currentLang === 'ru' && styles.langButtonActive,
+            styles.langOption,
+            currentLang === 'ru' && styles.langOptionActive,
           ]}
           onPress={switchToRussian}
         >
-          <Text style={[
-            styles.langButtonText,
-            currentLang === 'ru' && styles.langButtonTextActive,
-          ]}>
-            {t('settings.ru')}
+          <Text
+            style={[
+              styles.langOptionText,
+              currentLang === 'ru' && styles.langOptionTextActive,
+            ]}
+          >
+            RU
           </Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={[
-            styles.langButton,
-            currentLang === 'en' && styles.langButtonActive,
+            styles.langOption,
+            currentLang === 'en' && styles.langOptionActive,
           ]}
           onPress={switchToEnglish}
         >
-          <Text style={[
-            styles.langButtonText,
-            currentLang === 'en' && styles.langButtonTextActive,
-          ]}>
-            {t('settings.en')}
+          <Text
+            style={[
+              styles.langOptionText,
+              currentLang === 'en' && styles.langOptionTextActive,
+            ]}
+          >
+            EN
           </Text>
         </TouchableOpacity>
       </View>
 
-      <Button title={t('settings.logout')} color="red" onPress={handleLogout} />
+      <Button
+        title={t('settings.logout')}
+        onPress={handleLogout}
+      />
     </View>
   );
 };
@@ -78,6 +99,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 24,
     marginBottom: 16,
+    fontWeight: 'bold',
   },
   row: {
     flexDirection: 'row',
@@ -86,25 +108,35 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   label: {
+    fontSize: 16,
+    fontFamily: 'Montserrat-Regular',
+  },
+  labelName: {
+    fontFamily: 'Montserrat-Bold',
     fontSize: 18,
   },
-  langButton: {
-    borderWidth: 1,
-    borderColor: '#888',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    backgroundColor: '#eee',
+  langSwitcher: {
+    flexDirection: 'row',
+    backgroundColor: '#ddd',
+    borderRadius: 12,
+    overflow: 'hidden',
+    alignSelf: 'flex-start',
   },
-  langButtonActive: {
+  langOption: {
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    backgroundColor: '#ddd',
+  },
+  langOptionActive: {
     backgroundColor: '#4CAF50',
-    borderColor: '#4CAF50',
   },
-  langButtonText: {
+  langOptionText: {
     fontSize: 16,
+    fontFamily: 'Montserrat-Regular',
     color: '#333',
+    fontWeight: '500',
   },
-  langButtonTextActive: {
+  langOptionTextActive: {
     color: 'white',
     fontWeight: 'bold',
   },

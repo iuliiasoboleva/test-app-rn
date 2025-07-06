@@ -2,16 +2,18 @@ import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { useSelector } from 'react-redux';
 import { useTheme } from '@react-navigation/native';
+import { useTranslation } from 'react-i18next';
 
 const DetailScreen = () => {
   const currentItem = useSelector((state) => state.items.currentItem);
   const { colors } = useTheme();
+  const { t } = useTranslation();
 
   if (!currentItem) {
     return (
       <View style={[styles.container, { backgroundColor: colors.background }]}>
         <Text style={[styles.empty, { color: colors.text }]}>
-          Выберите элемент из списка
+          {t('chooseItem')}
         </Text>
       </View>
     );
@@ -39,7 +41,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   empty: {
-    fontFamily: 'Roboto-Regular',
     fontSize: 16,
   },
 });
