@@ -1,25 +1,33 @@
-import React, { useEffect, useCallback } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import {
   View,
   Text,
   FlatList,
+  TextInput,
   TouchableOpacity,
   StyleSheet,
   ActivityIndicator,
   RefreshControl,
   Platform,
   PermissionsAndroid,
+  useColorScheme,
 } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { setItems, setCurrentItem, setLoading } from '../store/itemsSlice';
 import notifee, { AndroidImportance } from '@notifee/react-native';
 
 const GITHUB_USER = 'iuliiasoboleva';
+const PER_PAGE = 5;
 
 const ListScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const items = useSelector((state) => state.items.items);
+  const items = useSelector((state) => state.items.items || []);
   const loading = useSelector((state) => state.items.loading);
+
+  const [page, setPage] = useState(1);
+  const [query, setQuery] = useState('');
+  const [hasMore, setHasMore] = useState(true);
+  const colorScheme = useColorScheme();
 
   useEffect(() => {
     async function setupNotifications() {
@@ -37,22 +45,48 @@ const ListScreen = ({ navigation }) => {
     setupNotifications();
   }, []);
 
-  const fetchRepos = useCallback(async () => {
+  const fetchRepos = useCallback(async (nextPage = 1, refresh = false) => {
     try {
       dispatch(setLoading(true));
-      const response = await fetch(`https://api.github.com/users/${GITHUB_USER}/repos`);
+      const response = await fetch(
+        `https://api.github.com/users/${GITHUB_USER}/repos?page=${nextPage}&per_page=${PER_PAGE}`
+      );
       const data = await response.json();
-      dispatch(setItems(data));
+
+      if (!Array.isArray(data)) {
+        console.error('GitHub API error:', data);
+        if (refresh) dispatch(setItems([]));
+        setHasMore(false);
+        return;
+      }
+
+      if (refresh || nextPage === 1) {
+        dispatch(setItems(data));
+      } else {
+        const newItems = [...items, ...data];
+        dispatch(setItems(newItems));
+      }
+
+      setPage(nextPage);
+      setHasMore(data.length === PER_PAGE);
     } catch (error) {
       console.error('Ошибка загрузки:', error);
+      if (refresh) dispatch(setItems([]));
+      setHasMore(false);
     } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch]);
+  }, [dispatch, items]);
 
   useEffect(() => {
-    fetchRepos();
+    fetchRepos(1, true);
   }, []);
+
+  const filteredItems = Array.isArray(items)
+    ? items.filter((item) =>
+      item.name.toLowerCase().includes(query.toLowerCase())
+    )
+    : [];
 
   const handlePress = async (item) => {
     if (!item) return;
@@ -85,12 +119,32 @@ const ListScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
+      <TextInput
+        style={styles.searchInput}
+        placeholder="Поиск..."
+        placeholderTextColor={colorScheme === 'dark' ? '#aaa' : '#888'}
+        value={query}
+        onChangeText={setQuery}
+      />
       <FlatList
-        data={items}
-        keyExtractor={(item) => item.id.toString()}
+        data={filteredItems}
+        keyExtractor={(item) => item.id?.toString() || String(Math.random())}
         renderItem={renderItem}
         refreshControl={
-          <RefreshControl refreshing={loading} onRefresh={fetchRepos} />
+          <RefreshControl refreshing={loading} onRefresh={() => fetchRepos(1, true)} />
+        }
+        onEndReached={() => {
+          if (!loading && hasMore) {
+            fetchRepos(page + 1);
+          }
+        }}
+        onEndReachedThreshold={0.1}
+        ListFooterComponent={
+          loading && items.length > 0 ? (
+            <View style={{ padding: 16 }}>
+              <ActivityIndicator size="small" />
+            </View>
+          ) : null
         }
       />
     </View>
@@ -105,11 +159,23 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginBottom: 12,
   },
-  text: { fontSize: 16 },
+  text: {
+    fontFamily: 'Roboto-Regular',
+    fontSize: 16
+  },
   loaderContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  searchInput: {
+    height: 40,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
+    paddingHorizontal: 12,
+    marginBottom: 12,
+    color: '#000',
   },
 });
 

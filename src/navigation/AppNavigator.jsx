@@ -8,6 +8,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useSelector, useDispatch } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Icon from 'react-native-vector-icons/Ionicons';
 import { ThemeContext } from '../ThemeContext';
 import { setAuth } from '../store/authSlice';
 
@@ -21,9 +22,22 @@ const Stack = createNativeStackNavigator();
 
 const Tabs = () => (
     <Tab.Navigator>
-        <Tab.Screen name="List" component={ListScreen} />
-        <Tab.Screen name="Detail" component={DetailScreen} />
-        <Tab.Screen name="Settings" component={SettingsScreen} />
+        <Tab.Screen name="List" component={ListScreen} options={{
+            tabBarIcon: ({ color, size }) => (
+                <Icon name="list-outline" color={color} size={size} />
+            ),
+        }} />
+        <Tab.Screen name="Detail" component={DetailScreen} options={{
+            tabBarIcon: ({ color, size }) => (
+                <Icon name="document-text-outline" color={color} size={size} />
+            ),
+        }} />
+
+        <Tab.Screen name="Settings" component={SettingsScreen} options={{
+            tabBarIcon: ({ color, size }) => (
+                <Icon name="settings-outline" color={color} size={size} />
+            ),
+        }} />
     </Tab.Navigator>
 );
 

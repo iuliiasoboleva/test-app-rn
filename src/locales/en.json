@@ -1,5 +1,11 @@
 {
     "login": "Login",
-    "password": "Password"
-  }
-  
+    "password": "Password",
+    "settings": {
+        "title": "Settings",
+        "darkTheme": "Dark Theme",
+        "ru": "Russian",
+        "en": "English",
+        "logout": "Logout"
+    }
+}

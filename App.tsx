@@ -14,7 +14,6 @@ const App = () => {
         const settings = await notifee.requestPermission();
         console.log('Permission settings:', settings);
 
-        // Создание канала уведомлений (нужно только 1 раз)
         await notifee.createChannel({
           id: 'default',
           name: 'Default Channel',

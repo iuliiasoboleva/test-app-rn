@@ -34,11 +34,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
+    fontFamily: 'Montserrat-Bold',
     fontSize: 22,
-    fontWeight: 'bold',
     marginBottom: 10,
   },
   empty: {
+    fontFamily: 'Roboto-Regular',
     fontSize: 16,
   },
 });
